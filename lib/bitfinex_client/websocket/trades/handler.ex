@@ -1,13 +1,19 @@
 defmodule BitfinexClient.Websocket.Trades.Handler do
   require Logger
 
+  alias BitfinexClient.PubSub
+
   ## trade execution
   def manage_frame([_, "te", _, _amount, price, _rate]) do
+    PubSub.publish(:btc_usd_ticker, price)
+
     Logger.debug("[execution] #{price}")
   end
 
   ## trade update
   def manage_frame([_, "tu", _, _amount, _trade_id, price, _rate]) do
+    PubSub.publish(:btc_usd_ticker, price)
+
     Logger.debug("[update] #{price}")
   end
 
@@ -16,6 +22,8 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
     Logger.debug("received a price batch")
 
     [_, _, price, _value] = List.last(batch)
+
+    PubSub.publish(:btc_usd_ticker, price)
 
     Logger.debug("[last] #{price}")
   end
