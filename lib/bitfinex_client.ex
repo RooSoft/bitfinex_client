@@ -1,0 +1,2 @@
+defmodule BitfinexClient do
+end
