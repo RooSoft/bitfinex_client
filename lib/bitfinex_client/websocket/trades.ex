@@ -42,11 +42,21 @@ defmodule BitfinexClient.Websocket.Trades do
     |> Connection.manage()
   end
 
+  @doc """
+  Connection handling, part of the WebSockex spec
+  """
   @spec handle_connect(any(), map()) :: {:ok, map()}
   def handle_connect(_conn, state) do
     {:ok, state}
   end
 
+  @doc """
+  Subscribe to a topic, will send messages to the pid
+
+  ## Examples
+    iex> BitfinexClient.Websocket.Trades.subscribe(self())
+    :ok
+  """
   @spec subscribe(pid()) :: :ok
   def subscribe(pid) do
     query_json = Jason.encode!(@query)
