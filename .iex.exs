@@ -1,4 +1,7 @@
 alias BitfinexClient.PubSub
+alias BitfinexClient.Http.GetBtcusdTrades
+
+GetBtcusdTrades.execute() |> IO.inspect
 
 PubSub.start_link()
 PubSub.subscribe(:btc_usd_ticker)
