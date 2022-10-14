@@ -124,4 +124,24 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
              }
            } == result
   end
+
+  test "a subscription" do
+    result =
+      %{
+        "chanId" => 585_878,
+        "channel" => "trades",
+        "event" => "subscribed",
+        "pair" => "BTCUSD"
+      }
+      |> Handler.manage_frame()
+
+    assert {
+             :ok,
+             %{
+               channel: "trades",
+               event: "subscribed",
+               pair: "BTCUSD"
+             }
+           } == result
+  end
 end

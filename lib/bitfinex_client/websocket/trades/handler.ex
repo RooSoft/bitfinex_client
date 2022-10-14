@@ -65,11 +65,19 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
 
   def manage_frame(%{
         "chanId" => _,
-        "channel" => "trades",
-        "event" => "subscribed",
-        "pair" => "BTCUSD"
+        "channel" => "trades" = channel,
+        "event" => "subscribed" = event,
+        "pair" => "BTCUSD" = pair
       }) do
     # BTCUSD subscription confirmed, nothing to do
+    {
+      :ok,
+      %{
+        channel: channel,
+        event: event,
+        pair: pair
+      }
+    }
   end
 
   def manage_frame(unknown_frame) do
