@@ -20,6 +20,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
     ...> end
     19630
   """
+  @spec manage_frame(list(), list()) :: atom() | {:ok, map()}
   def manage_frame(frame, opts \\ [])
 
   def manage_frame([_, "te", _, _amount, price, _rate], opts) do
@@ -100,5 +101,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
   def manage_frame(unknown_frame, _opts) do
     Logger.debug("Received an unknown frame")
     IO.inspect(unknown_frame)
+
+    :unknown_frame
   end
 end

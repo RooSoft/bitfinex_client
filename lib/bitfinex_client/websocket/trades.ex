@@ -67,7 +67,7 @@ defmodule BitfinexClient.Websocket.Trades do
   end
 
   def manage_frame(frame, state) do
-    Handler.manage_frame(frame, nil)
+    Handler.manage_frame(frame)
 
     {:ok, state}
   end
