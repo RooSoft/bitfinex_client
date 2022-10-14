@@ -1,4 +1,8 @@
 defmodule BitfinexClient.PubSub do
+  @moduledoc """
+  A way to dispatch messages to multiple recipients, based on topics
+  """
+
   @start_link_opts_default pub_sub_name: PubSub
   @subscribe_opts_default pub_sub_name: PubSub
   @publish_opts_default pub_sub_name: PubSub
