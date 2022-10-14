@@ -1,4 +1,4 @@
-defmodule BitfinexClient.Http.GetBtcusdTrades do
+defmodule BitfinexClient.Http.GetBtcUsdTrades do
   @moduledoc """
   Handles HTTP requests to the endpoint documented here:
 
