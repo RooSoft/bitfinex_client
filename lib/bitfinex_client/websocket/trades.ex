@@ -74,7 +74,12 @@ defmodule BitfinexClient.Websocket.Trades do
     {:noreply, state}
   end
 
-  @spec handle_frame({any(), binary()}, any()) :: {:ok, any()}
+  @doc """
+  When data is being received by Bitfinex, it is being dispatched to
+  BitfinexClient.Websocket.Trades.Handler, or being logged to the console
+  if of an unknown format
+  """
+  @spec handle_frame(any(), any()) :: {:ok, any()}
   def handle_frame({_type, msg}, %{pub_sub_name: pub_sub_name} = state) do
     Jason.decode!(msg)
     |> Handler.manage_frame(pub_sub_name: pub_sub_name)
@@ -82,13 +87,15 @@ defmodule BitfinexClient.Websocket.Trades do
     {:ok, state}
   end
 
-  @spec handle_frame(any(), any()) :: {:ok, any()}
   def handle_frame(_, state) do
     Logger.warning("unknown frame type")
 
     {:ok, state}
   end
 
+  @doc """
+  Called by Websockex when its process gets terminated, most probably by an error
+  """
   def terminate(reason, state) do
     IO.puts("Socket Terminating:\n#{inspect(reason)}\n\n#{inspect(state)}\n")
 
