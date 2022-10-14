@@ -6,7 +6,22 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
   alias BitfinexClient.PubSub
   alias BitfinexClient.Websocket.Trades.Handler
 
-  test "test a trade batch" do
+  test "a trade execution" do
+    PubSub.start_link()
+    PubSub.subscribe(:btc_usd_ticker)
+
+    [473_431, "te", "1227389557-tBTCUSD", 1_665_749_864, 19630, -0.00204594]
+    |> Handler.manage_frame()
+
+    price =
+      receive do
+        frame -> frame
+      end
+
+    assert 19630 == price
+  end
+
+  test "a trade batch" do
     PubSub.start_link()
     PubSub.subscribe(:btc_usd_ticker)
 
