@@ -1,8 +1,18 @@
 defmodule BitfinexClient.Http.GetBtcusdTrades do
+  @moduledoc """
+  Handles HTTP requests to the endpoint documented here:
+
+  https://docs.bitfinex.com/reference/rest-public-ticker
+  """
+
   require Logger
 
   @btcusd_ticker_url "https://api-pub.bitfinex.com/v2/ticker/tBTCUSD"
 
+  @doc """
+  Sends the HTTP request to get the current BTCUSD ticker value
+  """
+  @spec execute() :: {:ok, integer} | {:error, integer()} | {:error, binary()}
   def execute do
     case HTTPoison.get(@btcusd_ticker_url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
