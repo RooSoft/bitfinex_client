@@ -1,4 +1,10 @@
 defmodule BitfinexClient.Websocket.Trades.Handler do
+  @moduledoc """
+  The Bitfinex trades websocket sends lists in different formats. This module
+  aims to dispatch them through pattern matching and send messages to the PubSub
+  if necessary.
+  """
+
   require Logger
 
   alias BitfinexClient.PubSub
