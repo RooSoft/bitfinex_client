@@ -1,5 +1,5 @@
 defmodule BitfinexClient.Websocket.Trades.HandlerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest BitfinexClient.Websocket.Trades.Handler
 
@@ -8,6 +8,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
 
   test "a trade execution" do
     PubSub.start_link()
+    Process.sleep(100)
     PubSub.subscribe(:btc_usd_ticker)
 
     result =
@@ -25,6 +26,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
 
   test "a trade update" do
     PubSub.start_link()
+    Process.sleep(100)
     PubSub.subscribe(:btc_usd_ticker)
 
     result =
@@ -42,6 +44,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
 
   test "a trade batch" do
     PubSub.start_link()
+    Process.sleep(100)
     PubSub.subscribe(:btc_usd_ticker)
 
     result =
@@ -100,5 +103,25 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
       |> Handler.manage_frame()
 
     assert :heartbeat == result
+  end
+
+  test "an info event" do
+    result =
+      %{
+        "event" => "info",
+        "platform" => %{"status" => 1},
+        "serverId" => "ec9d43cd-9235-42cd-aa53-3ad432214b64",
+        "version" => 1.1
+      }
+      |> Handler.manage_frame()
+
+    assert {
+             :ok,
+             %{
+               status: 1,
+               server_id: "ec9d43cd-9235-42cd-aa53-3ad432214b64",
+               version: 1.1
+             }
+           } == result
   end
 end

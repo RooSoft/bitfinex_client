@@ -48,12 +48,19 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
 
   def manage_frame(%{
         "event" => "info",
-        "platform" => %{"status" => _status},
-        "serverId" => _server_id,
-        "version" => _version
+        "platform" => %{"status" => status},
+        "serverId" => server_id,
+        "version" => version
       }) do
     # info, nothing to do
-    :ok
+    {
+      :ok,
+      %{
+        status: status,
+        server_id: server_id,
+        version: version
+      }
+    }
   end
 
   def manage_frame(%{
