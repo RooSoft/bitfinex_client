@@ -9,7 +9,7 @@ defmodule BitfinexClient do
         Trades.subscribe(websocket_pid)
         :ok
 
-      {:error, message} ->
+      {:error, message, _} ->
         {:error, message}
     end
   end
