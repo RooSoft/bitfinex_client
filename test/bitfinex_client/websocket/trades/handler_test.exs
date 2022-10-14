@@ -8,8 +8,8 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
 
   test "a trade execution" do
     pub_sub_name = :trade_execution
-    PubSub.start_link(name: pub_sub_name)
-    PubSub.subscribe(:btc_usd_ticker, name: pub_sub_name)
+    PubSub.start_link(pub_sub_name: pub_sub_name)
+    PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
 
     result =
       [473_431, "te", "1227389557-tBTCUSD", 1_665_749_864, 19630, -0.00204594]
@@ -26,8 +26,8 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
 
   test "a trade update" do
     pub_sub_name = :trade_update
-    PubSub.start_link(name: pub_sub_name)
-    PubSub.subscribe(:btc_usd_ticker, name: pub_sub_name)
+    PubSub.start_link(pub_sub_name: pub_sub_name)
+    PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
 
     result =
       [473_431, "tu", "1227389557-tBTCUSD", 1_227_389_557, 1_665_749_864, 19630, -0.00204594]
@@ -45,8 +45,8 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
   test "a trade batch" do
     pub_sub_name = :trade_batch
 
-    PubSub.start_link(name: pub_sub_name)
-    PubSub.subscribe(:btc_usd_ticker, name: pub_sub_name)
+    PubSub.start_link(pub_sub_name: pub_sub_name)
+    PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
 
     result =
       [

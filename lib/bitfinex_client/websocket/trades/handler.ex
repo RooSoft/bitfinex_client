@@ -11,8 +11,8 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
 
   ## Examples
     iex> pub_sub_name = :manage_frame_doctest
-    ...> BitfinexClient.PubSub.start_link(name: pub_sub_name)
-    ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker, name: pub_sub_name)
+    ...> BitfinexClient.PubSub.start_link(pub_sub_name: pub_sub_name)
+    ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
     ...> [473431, "te", "1227389557-tBTCUSD", 1665749864, 19630, -0.00204594]
     ...> |> BitfinexClient.Websocket.Trades.Handler.manage_frame(pub_sub_name: pub_sub_name)
     ...> receive do
@@ -25,7 +25,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
   def manage_frame([_, "te", _, _amount, price, _rate], opts) do
     [pub_sub_name: pub_sub_name] = Keyword.merge(@manage_frame_opts_default, opts)
 
-    PubSub.publish(pub_sub_name, :btc_usd_ticker, price)
+    PubSub.publish(:btc_usd_ticker, price, pub_sub_name: pub_sub_name)
 
     :trade_execution
   end
@@ -35,7 +35,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
   def manage_frame([_, "tu", _, _amount, _trade_id, price, _rate], opts) do
     [pub_sub_name: pub_sub_name] = Keyword.merge(@manage_frame_opts_default, opts)
 
-    PubSub.publish(pub_sub_name, :btc_usd_ticker, price)
+    PubSub.publish(:btc_usd_ticker, price, pub_sub_name: pub_sub_name)
 
     :trade_update
   end
@@ -47,7 +47,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
 
     [_, _, price, _value] = List.first(batch)
 
-    PubSub.publish(pub_sub_name, :btc_usd_ticker, price)
+    PubSub.publish(:btc_usd_ticker, price, pub_sub_name: pub_sub_name)
 
     :trade_batch
   end
