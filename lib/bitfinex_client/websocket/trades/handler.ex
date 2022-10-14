@@ -37,6 +37,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
 
   def manage_frame([_id, "hb"]) do
     # nothing to do, this is a heartbeat
+    :heartbeat
   end
 
   def manage_frame(%{
@@ -46,6 +47,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
         "version" => _version
       }) do
     # info, nothing to do
+    :ok
   end
 
   def manage_frame(%{

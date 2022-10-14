@@ -25,7 +25,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
     PubSub.start_link()
     PubSub.subscribe(:btc_usd_ticker)
 
-    [473431, "tu", "1227389557-tBTCUSD", 1227389557, 1665749864, 19630, -0.00204594]
+    [473_431, "tu", "1227389557-tBTCUSD", 1_227_389_557, 1_665_749_864, 19630, -0.00204594]
     |> Handler.manage_frame()
 
     price =
@@ -83,5 +83,16 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
       end
 
     assert 19646 == price
+  end
+
+  test "a heartbeat" do
+    PubSub.start_link()
+    PubSub.subscribe(:btc_usd_ticker)
+
+    result =
+      [292_447, "hb"]
+      |> Handler.manage_frame()
+
+    assert :heartbeat == result
   end
 end
