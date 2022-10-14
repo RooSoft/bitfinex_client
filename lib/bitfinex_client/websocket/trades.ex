@@ -24,8 +24,6 @@ defmodule BitfinexClient.Websocket.Trades do
   end
 
   def handle_connect(_conn, state) do
-    Logger.info("Ready")
-
     {:ok, state}
   end
 
@@ -33,18 +31,14 @@ defmodule BitfinexClient.Websocket.Trades do
     query_json = Jason.encode!(@query)
 
     WebSockex.cast(pid, {:send_message, query_json})
-
-    Logger.debug("BTCUSD subscription attempt")
   end
 
   def handle_cast({:send_message, subscription_json}, state) do
-    Logger.debug("Bitfinex subscribing... to \n#{subscription_json}")
-
     {:reply, {:text, subscription_json}, state}
   end
 
   def handle_cast(_, state) do
-    Logger.debug("Unknown cast...")
+    Logger.warning("Unknown cast...")
 
     {:noreply, state}
   end
@@ -53,12 +47,12 @@ defmodule BitfinexClient.Websocket.Trades do
         :text,
         %{
           "event" => "info",
-          "platform" => %{"status" => status},
+          "platform" => %{"status" => _status},
           "serverId" => _server_id,
-          "version" => version
+          "version" => _version
         }
       }) do
-    Logger.debug("Received an info frame with status #{status}, version: #{version}")
+    # nothing to do, means we're connected to the server
   end
 
   def handle_frame({_type, msg}, state) do
@@ -69,7 +63,7 @@ defmodule BitfinexClient.Websocket.Trades do
   end
 
   def handle_frame(_, state) do
-    Logger.debug("unknown frame type")
+    Logger.warning("unknown frame type")
 
     {:ok, state}
   end

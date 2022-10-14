@@ -6,30 +6,40 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
   ## trade execution
   def manage_frame([_, "te", _, _amount, price, _rate]) do
     PubSub.publish(:btc_usd_ticker, price)
-
-    Logger.debug("[execution] #{price}")
   end
 
   ## trade update
   def manage_frame([_, "tu", _, _amount, _trade_id, price, _rate]) do
     PubSub.publish(:btc_usd_ticker, price)
-
-    Logger.debug("[update] #{price}")
   end
 
   ## trade batch
   def manage_frame([_id, batch]) when is_list(batch) do
-    Logger.debug("received a price batch")
-
     [_, _, price, _value] = List.last(batch)
 
     PubSub.publish(:btc_usd_ticker, price)
-
-    Logger.debug("[last] #{price}")
   end
 
   def manage_frame([_id, "hb"]) do
-    Logger.debug("received a hb frame")
+    # nothing to do, this is a heartbeat
+  end
+
+  def manage_frame(%{
+        "event" => "info",
+        "platform" => %{"status" => _status},
+        "serverId" => _server_id,
+        "version" => _version
+      }) do
+    # info, nothing to do
+  end
+
+  def manage_frame(%{
+        "chanId" => _,
+        "channel" => "trades",
+        "event" => "subscribed",
+        "pair" => "BTCUSD"
+      }) do
+    # BTCUSD subscription confirmed, nothing to do
   end
 
   def manage_frame(unknown_frame) do
