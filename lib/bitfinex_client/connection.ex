@@ -1,6 +1,12 @@
 defmodule BitfinexClient.Connection do
+  @moduledoc """
+  Handle messages received when a new connection is established to Bitfinex
+  """
   require Logger
 
+  @doc """
+  Converts a Websockex start_link result into something more in line with this lib's context
+  """
   def manage({:ok, pid}) do
     {:ok, pid}
   end
