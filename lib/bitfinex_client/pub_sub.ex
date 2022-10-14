@@ -44,14 +44,20 @@ defmodule BitfinexClient.PubSub do
       ...> receive do
       ...>   price -> price
       ...> end
-      19565
+      {:bitfinex, :btc_usd_ticker, 19565}
   """
   @spec publish(atom(), term(), list()) :: :ok
   def publish(topic, message, opts \\ []) do
     [pub_sub_name: pub_sub_name] = Keyword.merge(@publish_opts_default, opts)
 
+    encapsulated_message = {
+      :bitfinex,
+      topic,
+      message
+    }
+
     Registry.dispatch(pub_sub_name, topic, fn subscribers ->
-      for {pid, _} <- subscribers, do: send(pid, message)
+      for {pid, _} <- subscribers, do: send(pid, encapsulated_message)
     end)
   end
 end

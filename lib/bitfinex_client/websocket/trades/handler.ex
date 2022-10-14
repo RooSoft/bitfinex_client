@@ -24,7 +24,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
       ...> receive do
       ...>   frame -> frame
       ...> end
-      19630
+      {:bitfinex, :btc_usd_ticker, 19630}
   """
   @spec manage_frame(list(), list()) :: atom() | {:ok, map()}
   def manage_frame(frame, opts \\ [])

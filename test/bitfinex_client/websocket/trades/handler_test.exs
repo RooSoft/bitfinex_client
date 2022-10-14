@@ -15,13 +15,13 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
       [473_431, "te", "1227389557-tBTCUSD", 1_665_749_864, 19630, -0.00204594]
       |> Handler.manage_frame(pub_sub_name: pub_sub_name)
 
-    price =
+    ticker =
       receive do
         frame -> frame
       end
 
     assert :trade_execution == result
-    assert 19630 == price
+    assert {:bitfinex, :btc_usd_ticker, 19630} == ticker
   end
 
   test "a trade update" do
@@ -33,13 +33,13 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
       [473_431, "tu", "1227389557-tBTCUSD", 1_227_389_557, 1_665_749_864, 19630, -0.00204594]
       |> Handler.manage_frame(pub_sub_name: pub_sub_name)
 
-    price =
+    ticker =
       receive do
         frame -> frame
       end
 
     assert :trade_update = result
-    assert 19630 == price
+    assert {:bitfinex, :btc_usd_ticker, 19630} == ticker
   end
 
   test "a trade batch" do
@@ -86,13 +86,13 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
       ]
       |> Handler.manage_frame(pub_sub_name: pub_sub_name)
 
-    price =
+    ticker =
       receive do
         batch -> batch
       end
 
     assert :trade_batch == result
-    assert 19646 == price
+    assert {:bitfinex, :btc_usd_ticker, 19646} == ticker
   end
 
   test "a heartbeat" do
