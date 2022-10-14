@@ -8,17 +8,21 @@ defmodule BitfinexClient.Websocket.Trades do
 
   @stream_endpoint "wss://api.bitfinex.com/ws/1"
 
+  @start_link_opts_default pub_sub_name: PubSub
+
   @query %{
     event: "subscribe",
     channel: "trades",
     symbol: "tBTCUSD"
   }
 
-  def start_link() do
+  def start_link(opts \\ []) do
+    [pub_sub_name: pub_sub_name] = Keyword.merge(@start_link_opts_default, opts)
+
     WebSockex.start_link(
       @stream_endpoint,
       __MODULE__,
-      %{}
+      %{pub_sub_name: pub_sub_name}
     )
     |> Connection.manage()
   end
@@ -43,21 +47,9 @@ defmodule BitfinexClient.Websocket.Trades do
     {:noreply, state}
   end
 
-  def handle_frame({
-        :text,
-        %{
-          "event" => "info",
-          "platform" => %{"status" => _status},
-          "serverId" => _server_id,
-          "version" => _version
-        }
-      }) do
-    # nothing to do, means we're connected to the server
-  end
-
-  def handle_frame({_type, msg}, state) do
+  def handle_frame({_type, msg}, %{pub_sub_name: pub_sub_name} = state) do
     Jason.decode!(msg)
-    |> Handler.manage_frame()
+    |> Handler.manage_frame(pub_sub_name)
 
     {:ok, state}
   end
@@ -75,7 +67,7 @@ defmodule BitfinexClient.Websocket.Trades do
   end
 
   def manage_frame(frame, state) do
-    Handler.manage_frame(frame)
+    Handler.manage_frame(frame, nil)
 
     {:ok, state}
   end
