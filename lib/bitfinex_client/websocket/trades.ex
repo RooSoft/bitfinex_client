@@ -22,6 +22,14 @@ defmodule BitfinexClient.Websocket.Trades do
     symbol: "tBTCUSD"
   }
 
+  @doc """
+  Starts a PubSub process linked to the current process
+
+  ## Examples
+    iex> BitfinexClient.Websocket.Trades.start_link()
+    ...> |> elem(0)
+    :ok
+  """
   @spec start_link(list()) :: {:ok, pid} | {:error, integer(), binary()}
   def start_link(opts \\ []) do
     [pub_sub_name: pub_sub_name] = Keyword.merge(@start_link_opts_default, opts)
