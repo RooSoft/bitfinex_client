@@ -13,7 +13,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
 
     result =
       [473_431, "te", "1227389557-tBTCUSD", 1_665_749_864, 19630, -0.00204594]
-      |> Handler.manage_frame(pub_sub_name)
+      |> Handler.manage_frame(pub_sub_name: pub_sub_name)
 
     price =
       receive do
@@ -31,7 +31,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
 
     result =
       [473_431, "tu", "1227389557-tBTCUSD", 1_227_389_557, 1_665_749_864, 19630, -0.00204594]
-      |> Handler.manage_frame(pub_sub_name)
+      |> Handler.manage_frame(pub_sub_name: pub_sub_name)
 
     price =
       receive do
@@ -84,7 +84,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
           ["1227389393-tBTCUSD", 1_665_749_399, 19657, 0.001]
         ]
       ]
-      |> Handler.manage_frame(pub_sub_name)
+      |> Handler.manage_frame(pub_sub_name: pub_sub_name)
 
     price =
       receive do
@@ -98,7 +98,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
   test "a heartbeat" do
     result =
       [292_447, "hb"]
-      |> Handler.manage_frame(nil)
+      |> Handler.manage_frame()
 
     assert :heartbeat == result
   end
@@ -111,7 +111,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
         "serverId" => "ec9d43cd-9235-42cd-aa53-3ad432214b64",
         "version" => 1.1
       }
-      |> Handler.manage_frame(nil)
+      |> Handler.manage_frame()
 
     assert {
              :ok,
@@ -131,7 +131,7 @@ defmodule BitfinexClient.Websocket.Trades.HandlerTest do
         "event" => "subscribed",
         "pair" => "BTCUSD"
       }
-      |> Handler.manage_frame(nil)
+      |> Handler.manage_frame()
 
     assert {
              :ok,
