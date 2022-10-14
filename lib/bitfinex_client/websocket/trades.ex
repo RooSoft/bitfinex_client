@@ -49,7 +49,7 @@ defmodule BitfinexClient.Websocket.Trades do
 
   def handle_frame({_type, msg}, %{pub_sub_name: pub_sub_name} = state) do
     Jason.decode!(msg)
-    |> Handler.manage_frame(pub_sub_name)
+    |> Handler.manage_frame(pub_sub_name: pub_sub_name)
 
     {:ok, state}
   end
