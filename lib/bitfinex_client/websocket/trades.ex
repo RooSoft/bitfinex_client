@@ -22,6 +22,7 @@ defmodule BitfinexClient.Websocket.Trades do
     symbol: "tBTCUSD"
   }
 
+  @spec start_link(list()) :: {:ok, pid} | {:error, integer(), binary()}
   def start_link(opts \\ []) do
     [pub_sub_name: pub_sub_name] = Keyword.merge(@start_link_opts_default, opts)
 
@@ -33,10 +34,12 @@ defmodule BitfinexClient.Websocket.Trades do
     |> Connection.manage()
   end
 
+  @spec handle_connect(any(), map()) :: {:ok, map()}
   def handle_connect(_conn, state) do
     {:ok, state}
   end
 
+  @spec subscribe(pid()) :: :ok
   def subscribe(pid) do
     query_json = Jason.encode!(@query)
 
@@ -53,6 +56,7 @@ defmodule BitfinexClient.Websocket.Trades do
     {:noreply, state}
   end
 
+  @spec handle_frame({any(), binary()}, any()) :: {:ok, any()}
   def handle_frame({_type, msg}, %{pub_sub_name: pub_sub_name} = state) do
     Jason.decode!(msg)
     |> Handler.manage_frame(pub_sub_name: pub_sub_name)
@@ -60,6 +64,7 @@ defmodule BitfinexClient.Websocket.Trades do
     {:ok, state}
   end
 
+  @spec handle_frame(any(), any()) :: {:ok, any()}
   def handle_frame(_, state) do
     Logger.warning("unknown frame type")
 
@@ -70,11 +75,5 @@ defmodule BitfinexClient.Websocket.Trades do
     IO.puts("Socket Terminating:\n#{inspect(reason)}\n\n#{inspect(state)}\n")
 
     exit(:normal)
-  end
-
-  def manage_frame(frame, state) do
-    Handler.manage_frame(frame)
-
-    {:ok, state}
   end
 end
