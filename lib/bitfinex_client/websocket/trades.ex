@@ -1,4 +1,10 @@
 defmodule BitfinexClient.Websocket.Trades do
+  @moduledoc """
+  Handling the Bitfinex trades websocket endpoint
+
+  https://docs.bitfinex.com/reference/ws-public-trades
+  """
+
   use WebSockex
 
   require Logger
