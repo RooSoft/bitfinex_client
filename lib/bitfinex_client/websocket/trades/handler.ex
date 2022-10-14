@@ -4,16 +4,31 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
   alias BitfinexClient.PubSub
 
   ## trade execution
+  @doc """
+  Dispatches trade frames received by the Bitfinex websocket
+
+  ## Examples
+    iex> BitfinexClient.PubSub.start_link()
+    ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker)
+    ...> [473431, "te", "1227389557-tBTCUSD", 1665749864, 19630, -0.00204594]
+    ...> |> BitfinexClient.Websocket.Trades.Handler.manage_frame
+    ...> receive do
+    ...>   frame -> frame
+    ...> end
+    19630
+  """
   def manage_frame([_, "te", _, _amount, price, _rate]) do
     PubSub.publish(:btc_usd_ticker, price)
   end
 
-  ## trade update
+  # a trade update, example:
+  # [473431, "tu", "1227389557-tBTCUSD", 1227389557, 1665749864, 19630, -0.00204594]
   def manage_frame([_, "tu", _, _amount, _trade_id, price, _rate]) do
     PubSub.publish(:btc_usd_ticker, price)
   end
 
-  ## trade batch
+  # a trade batch
+  # see tests for examples
   def manage_frame([_id, batch]) when is_list(batch) do
     [_, _, price, _value] = List.first(batch)
 
