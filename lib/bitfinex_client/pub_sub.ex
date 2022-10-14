@@ -6,6 +6,7 @@ defmodule BitfinexClient.PubSub do
   @doc """
   Starts the PubSub manager
   """
+  @spec start_link(list()) :: {:ok, pid} | {:error, term}
   def start_link(opts \\ []) do
     [pub_sub_name: pub_sub_name] = Keyword.merge(@start_link_opts_default, opts)
 
@@ -21,12 +22,27 @@ defmodule BitfinexClient.PubSub do
     ...> |> elem(0)
     :ok
   """
+  @spec subscribe(atom(), list()) :: {:ok, pid} | {:error, {:already_registered, pid}}
   def subscribe(topic, opts \\ []) do
     [pub_sub_name: pub_sub_name] = Keyword.merge(@subscribe_opts_default, opts)
 
     Registry.register(pub_sub_name, topic, %{})
   end
 
+  @doc """
+  Publishes a message in a specific topic
+
+  ## Examples
+    iex> pub_sub_name = :pub_sub_publish_doctest
+    ...> BitfinexClient.PubSub.start_link(pub_sub_name: pub_sub_name)
+    ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
+    ...> BitfinexClient.PubSub.publish(:btc_usd_ticker, 19565, pub_sub_name: pub_sub_name)
+    ...> receive do
+    ...>   price -> price
+    ...> end
+    19565
+  """
+  @spec publish(atom(), term(), list()) :: :ok
   def publish(topic, message, opts \\ []) do
     [pub_sub_name: pub_sub_name] = Keyword.merge(@publish_opts_default, opts)
 
