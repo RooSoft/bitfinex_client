@@ -15,7 +15,7 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
 
   ## trade batch
   def manage_frame([_id, batch]) when is_list(batch) do
-    [_, _, price, _value] = List.last(batch)
+    [_, _, price, _value] = List.first(batch)
 
     PubSub.publish(:btc_usd_ticker, price)
   end
