@@ -21,10 +21,10 @@ defmodule BitfinexClient.PubSub do
   Subscribe the current process to a topic
 
   ## Examples
-    iex> BitfinexClient.PubSub.start_link()
-    ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker)
-    ...> |> elem(0)
-    :ok
+      iex> BitfinexClient.PubSub.start_link()
+      ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker)
+      ...> |> elem(0)
+      :ok
   """
   @spec subscribe(atom(), list()) :: {:ok, pid} | {:error, {:already_registered, pid}}
   def subscribe(topic, opts \\ []) do
@@ -37,14 +37,14 @@ defmodule BitfinexClient.PubSub do
   Publishes a message in a specific topic
 
   ## Examples
-    iex> pub_sub_name = :pub_sub_publish_doctest
-    ...> BitfinexClient.PubSub.start_link(pub_sub_name: pub_sub_name)
-    ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
-    ...> BitfinexClient.PubSub.publish(:btc_usd_ticker, 19565, pub_sub_name: pub_sub_name)
-    ...> receive do
-    ...>   price -> price
-    ...> end
-    19565
+      iex> pub_sub_name = :pub_sub_publish_doctest
+      ...> BitfinexClient.PubSub.start_link(pub_sub_name: pub_sub_name)
+      ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
+      ...> BitfinexClient.PubSub.publish(:btc_usd_ticker, 19565, pub_sub_name: pub_sub_name)
+      ...> receive do
+      ...>   price -> price
+      ...> end
+      19565
   """
   @spec publish(atom(), term(), list()) :: :ok
   def publish(topic, message, opts \\ []) do

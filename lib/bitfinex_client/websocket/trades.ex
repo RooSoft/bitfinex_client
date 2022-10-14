@@ -26,9 +26,9 @@ defmodule BitfinexClient.Websocket.Trades do
   Starts a PubSub process linked to the current process
 
   ## Examples
-    iex> BitfinexClient.Websocket.Trades.start_link()
-    ...> |> elem(0)
-    :ok
+      iex> BitfinexClient.Websocket.Trades.start_link()
+      ...> |> elem(0)
+      :ok
   """
   @spec start_link(list()) :: {:ok, pid} | {:error, integer(), binary()}
   def start_link(opts \\ []) do
@@ -54,8 +54,8 @@ defmodule BitfinexClient.Websocket.Trades do
   Subscribe to a topic, will send messages to the pid
 
   ## Examples
-    iex> BitfinexClient.Websocket.Trades.subscribe(self())
-    :ok
+      iex> BitfinexClient.Websocket.Trades.subscribe(self())
+      :ok
   """
   @spec subscribe(pid()) :: :ok
   def subscribe(pid) do

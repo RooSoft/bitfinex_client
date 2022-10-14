@@ -16,15 +16,15 @@ defmodule BitfinexClient.Websocket.Trades.Handler do
   Dispatches trade frames received by the Bitfinex websocket
 
   ## Examples
-    iex> pub_sub_name = :manage_frame_doctest
-    ...> BitfinexClient.PubSub.start_link(pub_sub_name: pub_sub_name)
-    ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
-    ...> [473431, "te", "1227389557-tBTCUSD", 1665749864, 19630, -0.00204594]
-    ...> |> BitfinexClient.Websocket.Trades.Handler.manage_frame(pub_sub_name: pub_sub_name)
-    ...> receive do
-    ...>   frame -> frame
-    ...> end
-    19630
+      iex> pub_sub_name = :manage_frame_doctest
+      ...> BitfinexClient.PubSub.start_link(pub_sub_name: pub_sub_name)
+      ...> BitfinexClient.PubSub.subscribe(:btc_usd_ticker, pub_sub_name: pub_sub_name)
+      ...> [473431, "te", "1227389557-tBTCUSD", 1665749864, 19630, -0.00204594]
+      ...> |> BitfinexClient.Websocket.Trades.Handler.manage_frame(pub_sub_name: pub_sub_name)
+      ...> receive do
+      ...>   frame -> frame
+      ...> end
+      19630
   """
   @spec manage_frame(list(), list()) :: atom() | {:ok, map()}
   def manage_frame(frame, opts \\ [])
